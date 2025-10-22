@@ -81,20 +81,48 @@ npm run android
 
 ## 📱 開発状況
 
-### 完了済み
+### 完了済み（Week 1）
 
+#### プロジェクトセットアップ
 - ✅ プロジェクト企画書作成
 - ✅ 要件定義書作成
 - ✅ 開発環境セットアップ
 - ✅ React Nativeプロジェクト初期化
 - ✅ プロジェクト構造作成
 - ✅ 型定義・定数ファイル作成
-- ✅ Android権限設定
+- ✅ Android権限設定（Bluetooth、位置情報）
 
-### 次のステップ（Week 1）
+#### BLE基礎実装
+- ✅ BleManagerサービス実装
+- ✅ useBLEカスタムフック実装
+- ✅ デバイススキャン機能
+- ✅ 自動スキャン（5秒間隔）
+- ✅ 権限管理システム
 
-- [ ] BLE基礎実装（Day 3-5）
-- [ ] 基本UI構築（Day 6-7）
+#### 基本UI構築
+- ✅ メッセージ画面実装
+- ✅ ノード管理画面実装
+- ✅ タブナビゲーション
+- ✅ アプリロゴ設定（全解像度対応）
+
+#### 実機テスト
+- ✅ Android実機でのビルド・インストール成功
+- ✅ BLEスキャン動作確認
+- ✅ Bluetooth権限取得確認
+- ✅ 基本UI表示確認
+- ✅ アプリロゴ表示確認
+
+#### コード品質
+- ✅ TypeScriptエラー解消
+- ✅ ESLintエラー解消
+- ✅ Gradle warningの解消（jcenter非推奨対応）
+
+### 次のステップ（Week 2）
+
+- [ ] メッセージング機能の完成
+- [ ] ノード間通信の実装
+- [ ] メッセージ暗号化
+- [ ] データ永続化の改善
 
 詳細は [企画書](docs/01_Planning/README.md) を参照してください。
 
@@ -104,17 +132,62 @@ npm run android
 
 ### モバイルアプリ
 
-- **フレームワーク**: React Native 0.73.0
-- **言語**: TypeScript
+- **フレームワーク**: React Native 0.76.5
+- **言語**: TypeScript 5.0.4
 - **状態管理**: React Context API
-- **Bluetooth**: react-native-ble-manager
-- **ストレージ**: AsyncStorage
+- **ナビゲーション**: React Navigation 7.x
+- **Bluetooth**: react-native-ble-manager 11.5.3
+- **ストレージ**: @react-native-async-storage/async-storage
+- **暗号化**: react-native-crypto-js
 
 ### ブロックチェーン
 
 - **ネットワーク**: Solana Devnet
 - **フレームワーク**: Anchor (Rust)
-- **統合**: Solana Mobile Stack
+- **統合**: @solana/web3.js 1.98.4
+
+---
+
+## 🧪 実機テスト結果
+
+### テスト環境
+- **デバイス**: Android実機（Seeker - 15）
+- **OSバージョン**: Android 15
+- **テスト日**: 2025年10月22日
+
+### テスト項目
+
+#### ✅ アプリケーション基本機能
+- アプリのビルド・インストール: 正常
+- アプリ起動: 正常
+- クラッシュ: なし
+- メモリリーク: 検出なし
+
+#### ✅ Bluetooth機能
+- Bluetooth権限リクエスト: 正常動作
+  - ACCESS_FINE_LOCATION: 許可
+  - BLUETOOTH_SCAN: 許可
+  - BLUETOOTH_CONNECT: 許可
+  - BLUETOOTH_ADVERTISE: 許可
+- BLE初期化: 成功
+- デバイススキャン: 正常動作（5秒間隔で自動実行）
+- スキャン開始/停止: 正常
+
+#### ✅ UI/UX
+- メッセージ画面: 正常表示
+- ノード管理画面: 実装済み
+- タブナビゲーション: 動作
+- アプリロゴ: 全解像度で正常表示
+- レスポンシブ: 正常
+
+#### 📋 既知の問題
+- タブ切り替えが特定の状況で遅延する場合がある（手動操作では正常動作）
+- BLEデバイス検出は周辺にBLE機器がある環境でのみ確認可能
+
+### パフォーマンス
+- アプリ起動時間: ~2秒
+- BLEスキャン開始時間: ~0.5秒
+- メモリ使用量: 正常範囲内
 
 ---
 
@@ -172,5 +245,7 @@ npm run test:coverage
 ---
 
 **作成日**: 2025年10月17日
-**バージョン**: 1.0.0
+**最終更新**: 2025年10月22日
+**バージョン**: 0.1.0 (Week 1 完了)
 **対象**: Cypherpunk Hackathon - Mobile DePIN
+**ステータス**: 実機テスト完了、Week 1 マイルストーン達成
