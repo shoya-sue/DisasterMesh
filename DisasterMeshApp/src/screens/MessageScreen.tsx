@@ -70,16 +70,12 @@ export default function MessageScreen({
   }, []);
 
   // メッセージ受信時のハンドラー
+  // Note: 現在は未実装。将来的にはBLEフックからのコールバックを使用します
   useEffect(() => {
     if (onMessageReceived) {
-      const handleIncomingMessage = (message: Message) => {
-        setMessages(prev => [message, ...prev]);
-        saveMessages([message, ...messages]);
-      };
-      // Note: この実装は簡略化されています
-      // 実際にはBLEフックからのコールバックを使用します
+      // TODO: メッセージ受信ハンドラーの実装
     }
-  }, [onMessageReceived, messages]);
+  }, [onMessageReceived]);
 
   // メッセージ送信
   const handleSendMessage = useCallback(async () => {

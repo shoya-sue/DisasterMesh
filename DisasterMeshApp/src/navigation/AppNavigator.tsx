@@ -47,7 +47,7 @@ export default function AppNavigator({
   onConnectDevice,
   onDisconnectDevice,
   onSendMessage,
-  onMessageReceived,
+  onMessageReceived: _onMessageReceived,
 }: AppNavigatorProps) {
   return (
     <Tab.Navigator

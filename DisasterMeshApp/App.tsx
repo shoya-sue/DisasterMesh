@@ -88,7 +88,7 @@ function App(): React.JSX.Element {
     [sendMessage]
   );
 
-  // 初期化処理
+  // 初期化処理（初回のみ実行）
   useEffect(() => {
     const initializeApp = async () => {
       try {
@@ -128,7 +128,8 @@ function App(): React.JSX.Element {
     };
 
     initializeApp();
-  }, [initialize, startScan]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // 初回のみ実行
 
   // エラー表示
   useEffect(() => {

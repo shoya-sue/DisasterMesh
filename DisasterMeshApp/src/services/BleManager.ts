@@ -11,10 +11,9 @@ import BleManager, {
   Peripheral,
   PeripheralInfo,
 } from 'react-native-ble-manager';
-import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
+import { NativeModules, NativeEventEmitter } from 'react-native';
 import { BLE_CONFIG } from '../constants/config';
-import { MessagePacket, MessagePayload } from '../types/message';
-import { Node } from '../types/node';
+import { MessagePacket } from '../types/message';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);

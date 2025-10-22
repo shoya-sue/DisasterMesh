@@ -5,10 +5,10 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Peripheral, PeripheralInfo } from 'react-native-ble-manager';
+import { Peripheral } from 'react-native-ble-manager';
 import BleManagerService from '../services/BleManager';
 import { MessagePacket } from '../types/message';
-import { Node, getSignalStrength } from '../types/node';
+import { Node } from '../types/node';
 import {
   requestBluetoothPermissions,
   checkBluetoothPermissions,
@@ -122,11 +122,6 @@ export function useBLE(
    * スキャンを開始
    */
   const startScan = useCallback(async (): Promise<void> => {
-    if (!isInitialized) {
-      setError('BLEが初期化されていません');
-      return;
-    }
-
     try {
       setIsScanning(true);
       setError(null);
@@ -136,7 +131,7 @@ export function useBLE(
       setError('スキャン開始に失敗しました');
       setIsScanning(false);
     }
-  }, [isInitialized]);
+  }, []);
 
   /**
    * スキャンを停止
