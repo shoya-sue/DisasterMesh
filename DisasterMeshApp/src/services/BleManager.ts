@@ -14,6 +14,8 @@ import BleManager, {
 import { NativeModules, NativeEventEmitter } from 'react-native';
 import { BLE_CONFIG } from '../constants/config';
 import { MessagePacket } from '../types/message';
+import { encryptMessage, decryptMessage, signMessage, verifySignature } from '../utils/encryption';
+import { getEncryptionKey, getSigningKey } from '../utils/keyManager';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -265,8 +267,43 @@ class BleManagerService {
     messagePacket: MessagePacket
   ): Promise<void> {
     try {
-      // メッセージをJSON文字列に変換
-      const jsonString = JSON.stringify(messagePacket);
+      // 暗号化キーと署名キーを取得
+      const encryptionKey = await getEncryptionKey();
+      const signingKey = await getSigningKey();
+
+      // メッセージ内容を暗号化
+      const encryptedContent = encryptMessage(
+        messagePacket.payload.content,
+        encryptionKey
+      );
+
+      // 暗号化されたペイロードを作成
+      const encryptedPayload = {
+        ...messagePacket.payload,
+        content: encryptedContent,
+      };
+
+      // ペイロードに署名を追加
+      const payloadString = JSON.stringify({
+        id: encryptedPayload.id,
+        from: encryptedPayload.from,
+        to: encryptedPayload.to,
+        content: encryptedPayload.content,
+        timestamp: encryptedPayload.timestamp,
+        ttl: encryptedPayload.ttl,
+      });
+      const signature = signMessage(payloadString, signingKey);
+      encryptedPayload.signature = signature;
+
+      // 暗号化されたパケットを作成
+      const securePacket: MessagePacket = {
+        version: messagePacket.version,
+        type: messagePacket.type,
+        payload: encryptedPayload,
+      };
+
+      // パケットをJSON文字列に変換
+      const jsonString = JSON.stringify(securePacket);
 
       // Base64エンコード
       const base64Data = Buffer.from(jsonString, 'utf-8').toString('base64');
@@ -282,7 +319,7 @@ class BleManagerService {
         Array.from(byteArray)
       );
 
-      console.log('[BleManager] Message sent to:', peripheralId);
+      console.log('[BleManager] Encrypted message sent to:', peripheralId);
     } catch (error) {
       console.error('[BleManager] Send message failed:', error);
       throw error;
@@ -292,7 +329,7 @@ class BleManagerService {
   /**
    * 受信データをデコード
    */
-  decodeMessage(data: number[]): MessagePacket | null {
+  async decodeMessage(data: number[]): Promise<MessagePacket | null> {
     try {
       // バイト配列を文字列に変換
       const base64String = Buffer.from(data).toString('utf-8');
@@ -301,9 +338,49 @@ class BleManagerService {
       const jsonString = Buffer.from(base64String, 'base64').toString('utf-8');
 
       // JSONパース
-      const messagePacket: MessagePacket = JSON.parse(jsonString);
+      const encryptedPacket: MessagePacket = JSON.parse(jsonString);
 
-      return messagePacket;
+      // 署名を検証
+      const signingKey = await getSigningKey();
+      const payloadString = JSON.stringify({
+        id: encryptedPacket.payload.id,
+        from: encryptedPacket.payload.from,
+        to: encryptedPacket.payload.to,
+        content: encryptedPacket.payload.content,
+        timestamp: encryptedPacket.payload.timestamp,
+        ttl: encryptedPacket.payload.ttl,
+      });
+
+      const isValid = verifySignature(
+        payloadString,
+        encryptedPacket.payload.signature,
+        signingKey
+      );
+
+      if (!isValid) {
+        console.warn('[BleManager] Invalid message signature');
+        return null;
+      }
+
+      // メッセージ内容を復号化
+      const encryptionKey = await getEncryptionKey();
+      const decryptedContent = decryptMessage(
+        encryptedPacket.payload.content,
+        encryptionKey
+      );
+
+      // 復号化されたパケットを返す
+      const decryptedPacket: MessagePacket = {
+        version: encryptedPacket.version,
+        type: encryptedPacket.type,
+        payload: {
+          ...encryptedPacket.payload,
+          content: decryptedContent,
+        },
+      };
+
+      console.log('[BleManager] Message decrypted successfully');
+      return decryptedPacket;
     } catch (error) {
       console.error('[BleManager] Decode message failed:', error);
       return null;

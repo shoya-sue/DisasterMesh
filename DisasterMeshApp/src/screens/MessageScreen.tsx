@@ -40,7 +40,7 @@ interface MessageScreenProps {
 export default function MessageScreen({
   connectedNodes,
   onSendMessage,
-  onMessageReceived,
+  onMessageReceived: _onMessageReceived,
 }: MessageScreenProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
@@ -69,13 +69,8 @@ export default function MessageScreen({
     loadMessageHistory();
   }, []);
 
-  // メッセージ受信時のハンドラー
-  // Note: 現在は未実装。将来的にはBLEフックからのコールバックを使用します
-  useEffect(() => {
-    if (onMessageReceived) {
-      // TODO: メッセージ受信ハンドラーの実装
-    }
-  }, [onMessageReceived]);
+  // Note: メッセージ受信処理はApp.tsxのhandleMessageReceivedで処理されます
+  // onMessageReceivedコールバックがuseBLEフック経由で呼び出されます
 
   // メッセージ送信
   const handleSendMessage = useCallback(async () => {

@@ -106,17 +106,17 @@ export default function NodeScreen({
 
   // 信号強度のレベルを取得
   const getSignalLevel = (rssi: number): string => {
-    if (rssi >= -50) return '優';
-    if (rssi >= -70) return '良';
-    if (rssi >= -85) return '可';
+    if (rssi >= -50) {return '優';}
+    if (rssi >= -70) {return '良';}
+    if (rssi >= -85) {return '可';}
     return '弱';
   };
 
   // 信号強度の色を取得
   const getSignalColor = (rssi: number): string => {
-    if (rssi >= -50) return '#4CAF50';
-    if (rssi >= -70) return '#8BC34A';
-    if (rssi >= -85) return '#FFC107';
+    if (rssi >= -50) {return '#4CAF50';}
+    if (rssi >= -70) {return '#8BC34A';}
+    if (rssi >= -85) {return '#FFC107';}
     return '#F44336';
   };
 

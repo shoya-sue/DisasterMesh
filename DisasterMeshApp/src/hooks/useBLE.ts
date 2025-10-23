@@ -98,9 +98,9 @@ export function useBLE(
           }
         },
 
-        onDidUpdateValueForCharacteristic: (data) => {
-          // メッセージをデコード
-          const packet = BleManagerService.decodeMessage(data.value);
+        onDidUpdateValueForCharacteristic: async (data) => {
+          // メッセージをデコード（非同期処理）
+          const packet = await BleManagerService.decodeMessage(data.value);
 
           if (packet && onMessageReceived) {
             onMessageReceived(data.peripheral, packet);

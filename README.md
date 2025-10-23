@@ -117,14 +117,35 @@ npm run android
 - ✅ ESLintエラー解消
 - ✅ Gradle warningの解消（jcenter非推奨対応）
 
-### 次のステップ（Week 2）
+### Week 2 完了
 
-- [ ] メッセージング機能の完成
-- [ ] ノード間通信の実装
-- [ ] メッセージ暗号化
-- [ ] データ永続化の改善
+#### メッセージング・セキュリティ機能
+- ✅ メッセージング機能の完成
+- ✅ BLE通信フローの確立
+- ✅ メッセージ暗号化（AES-256）
+- ✅ メッセージ署名（HMAC-SHA256）
+- ✅ 暗号化キー管理
+- ✅ BleManager暗号化統合
+- ✅ TypeScript型定義作成
 
-詳細は [企画書](docs/01_Planning/README.md) を参照してください。
+#### 新規ファイル
+- ✅ `src/utils/encryption.ts` - 暗号化・復号化ユーティリティ
+- ✅ `src/utils/keyManager.ts` - 暗号化キー管理
+- ✅ `src/types/crypto.d.ts` - CryptoJS型定義
+
+#### コード品質
+- ✅ TypeScriptコンパイル成功
+- ✅ ESLintエラー0件
+- ✅ Androidビルド成功
+
+### 次のステップ（Week 3）
+
+- [ ] 実機での暗号化メッセージ送受信テスト
+- [ ] メッシュネットワークのマルチホップ転送実装
+- [ ] メッセージ履歴の暗号化保存
+- [ ] Solana統合（報酬システム）
+
+詳細は [企画書](docs/01_Planning/README.md) と [Week 2成果レポート](/tmp/week2_results.md) を参照してください。
 
 ---
 
@@ -138,7 +159,9 @@ npm run android
 - **ナビゲーション**: React Navigation 7.x
 - **Bluetooth**: react-native-ble-manager 11.5.3
 - **ストレージ**: @react-native-async-storage/async-storage
-- **暗号化**: react-native-crypto-js
+- **暗号化**:
+  - react-native-crypto-js (AES-256, HMAC-SHA256)
+  - react-native-get-random-values (安全な乱数生成)
 
 ### ブロックチェーン
 
@@ -246,6 +269,6 @@ npm run test:coverage
 
 **作成日**: 2025年10月17日
 **最終更新**: 2025年10月22日
-**バージョン**: 0.1.0 (Week 1 完了)
+**バージョン**: 0.2.0 (Week 2 完了)
 **対象**: Cypherpunk Hackathon - Mobile DePIN
-**ステータス**: 実機テスト完了、Week 1 マイルストーン達成
+**ステータス**: 暗号化機能実装完了、Week 2 マイルストーン達成

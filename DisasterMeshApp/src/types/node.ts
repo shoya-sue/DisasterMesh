@@ -31,9 +31,9 @@ export type SignalStrength = 'excellent' | 'good' | 'fair' | 'poor';
  * 信号強度を判定
  */
 export function getSignalStrength(rssi: number): SignalStrength {
-  if (rssi >= -50) return 'excellent';
-  if (rssi >= -60) return 'good';
-  if (rssi >= -70) return 'fair';
+  if (rssi >= -50) {return 'excellent';}
+  if (rssi >= -60) {return 'good';}
+  if (rssi >= -70) {return 'fair';}
   return 'poor';
 }
 
